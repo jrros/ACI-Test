@@ -1,0 +1,3 @@
+tenant,AP_name,BD_name,BD_gate,vrf,L3OUTName,L3extOUTName,PHY_Domain,EPG_name,vlanid,podid,port_no,leaf,Switch_mode,interface_mode,interface_type,state
+HKMA_L2,SRV_PHY,v477_BD,172.28.77.1/24,HKMA_Vrf,,,SVR_PY,v477_EPG,477,1, eth1/1,1001,access,untagged,switch_port,present
+HKMA_L2,SRV_PHY,v478_BD,172.28.78.1/24,HKMA_Vrf,,,SVR_PY,v478_EPG,478,1, eth1/1,1002,trunk,regular,switch_port,present

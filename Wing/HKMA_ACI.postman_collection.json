@@ -1,0 +1,616 @@
+{
+	"info": {
+		"_postman_id": "06d7d39d-a78e-48fd-8c47-853b34999d4b",
+		"name": "HKMA_ACI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tenants",
+			"item": [
+				{
+					"name": "1.Create-Tenant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fvTenant\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/tn-{{tenant}}\",\n\t\t\t\"name\": \"{{tenant}}\",\n\t\t\t\"rn\": \"tn-{{tenant}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}.json"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.Create-vrf",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fvCtx\": {\n\t\t\"attributes\": {\n\t\t\t\"bdEnforcedEnable\": \"no\",\n\t\t\t\"dn\": \"uni/tn-{{tenant}}/ctx-{{vrf}}\",\n\t\t\t\"name\": \"{{vrf}}\",\n\t\t\t\"pcEnfDir\": \"ingress\",\n\t\t\t\"pcEnfPref\": \"enforced\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/ctx-{{vrf}}.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"ctx-{{vrf}}.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.Create_BD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fvBD\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/tn-{{tenant}}/BD-{{BD_name}}\",\n\t\t\t\"arpFlood\": \"true\",\n\t\t\t\"name\": \"{{BD_name}}\",\n\t\t\t\"rn\": \"BD-{{BD_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"fvSubnet\": {\n\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\"dn\": \"uni/tn-{{tenant}}/BD-{{BD_name}}/subnet-[{{BD_gate}}]\",\n\t\t\t\t\t\t\"ctrl\": \"\",\n\t\t\t\t\t\t\"ip\": \"{{BD_gate}}\",\n\t\t\t\t\t\t\"scope\": \"public\",\n\t\t\t\t\t\t\"rn\": \"subnet-[{{BD_gate}}]\",\n\t\t\t\t\t\t\"status\": \"created\"\n\t\t\t\t\t},\n\t\t\t\t\t\"children\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"fvRsBDSubnetToProfile\": {\n\t\t\t\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\t\t\t\"tnL3extOutName\": \"{{L3OUTName}}\",\n\t\t\t\t\t\t\t\t\t\"status\": \"created,modified\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"fvRsCtx\": {\n\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\"tnFvCtxName\": \"{{vrf}}\",\n\t\t\t\t\t\t\"status\": \"created,modified\"\n\t\t\t\t\t},\n\t\t\t\t\t\"children\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"fvRsBDToProfile\": {\n\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\"tnL3extOutName\": \"{{L3extOUTName}}\",\n\t\t\t\t\t\t\"status\": \"created,modified\"\n\t\t\t\t\t},\n\t\t\t\t\t\"children\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"fvRsBDToOut\": {\n\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\"tnL3extOutName\": \"{{L3OUTName}}\",\n\t\t\t\t\t\t\"status\": \"created\"\n\t\t\t\t\t},\n\t\t\t\t\t\"children\": []\n\t\t\t\t}\n\t\t\t}\n\t\t]\n\t}\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-{{BD_name}}.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"BD-{{BD_name}}.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4.Create-application_polife",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fvAp\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/tn-{{tenant}}/ap-{{AP_name}}\",\n\t\t\t\"name\": \"{{AP_name}}\",\n\t\t\t\"rn\": \"ap-{{AP_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"fvAEPg\": {\n\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\"dn\": \"uni/tn-{{tenant}}/ap-{{AP_name}}/epg-{{EPG_name}}\",\n\t\t\t\t\t\t\"name\": \"{{EPG_name}}\",\n\t\t\t\t\t\t\"rn\": \"epg-{{EPG_name}}\",\n\t\t\t\t\t\t\"status\": \"created\"\n\t\t\t\t\t},\n\t\t\t\t\t\"children\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"fvRsBd\": {\n\t\t\t\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\t\t\t\"tnFvBDName\": \"{{BD_name}}\",\n\t\t\t\t\t\t\t\t\t\"status\": \"created,modified\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"fvRsDomAtt\": {\n\t\t\t\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\t\t\t\"tDn\": \"uni/phys-{{PHY-Domain}}\",\n\t\t\t\t\t\t\t\t\t\"status\": \"created\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t}\n\t\t]\n\t}\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}.json"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Fabric",
+			"item": [
+				{
+					"name": "1.Pool",
+					"item": [
+						{
+							"name": "vlan_pool",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fvnsVlanInstP\": {\n        \"attributes\": {\n            \"dn\": \"uni/infra/vlanns-[{{vlan_pool}}]-static\",\n            \"name\": \"{{vlan_pool}}\",\n            \"allocMode\": \"static\",\n            \"rn\": \"vlanns-[{{vlan_pool}}]-static\"\n        },\n        \"children\": [\n            {\n                \"fvnsEncapBlk\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/infra/vlanns-[{{vlan_pool}}]-static/from-[vlan-{{start_vlan}}]-to-[vlan-{{end_vlan}}]\",\n                        \"from\": \"vlan-{{start_vlan}}\",\n                        \"to\": \"vlan-{{end_vlan}}\",\n                        \"rn\": \"from-[vlan-{{start_vlan}}]-to-[vlan-{{end_vlan}}]\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apic}}/api/node/mo/uni/infra/vlanns-[{{vlan_pool}}]-static.json",
+									"protocol": "https",
+									"host": [
+										"{{apic}}"
+									],
+									"path": [
+										"api",
+										"node",
+										"mo",
+										"uni",
+										"infra",
+										"vlanns-[{{vlan_pool}}]-static.json"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2.Domain",
+					"item": [
+						{
+							"name": "Physical_Domain",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"physDomP\": {\n        \"attributes\": {\n            \"dn\": \"uni/phys-{{PHY_Domain}}\",\n            \"name\": \"{{PHY_Domain}}\",\n            \"rn\": \"phys-{{PHY_Domain}}\"\n        },\n        \"children\": [\n            {\n                \"infraRsVlanNs\": {\n                    \"attributes\": {\n                        \"tDn\": \"uni/infra/vlanns-[{{vlan_pool}}]-static\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apic}}/api/node/mo/uni/phys-{{PHY_Domain}}.json",
+									"protocol": "https",
+									"host": [
+										"{{apic}}"
+									],
+									"path": [
+										"api",
+										"node",
+										"mo",
+										"uni",
+										"phys-{{PHY_Domain}}.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "L3Domain",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"l3extDomP\": {\n        \"attributes\": {\n\t            \"dn\": \"uni/l3dom-{{L3_domain}}\",\n            \"name\": \"{{L3_domain}}\",\n            \"rn\": \"l3dom-{{L3_domain}}\"\n        },\n        \"children\": [\n            {\n                \"infraRsVlanNs\": {\n                    \"attributes\": {\n                        \"tDn\": \"uni/infra/vlanns-[{{vlan_pool}}]-static\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apic}}/api/node/mo/uni/l3dom-{{L3_domain}}.json",
+									"protocol": "https",
+									"host": [
+										"{{apic}}"
+									],
+									"path": [
+										"api",
+										"node",
+										"mo",
+										"uni",
+										"l3dom-{{L3_domain}}.json"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "3.Policies",
+					"item": [
+						{
+							"name": "Interface",
+							"item": [
+								{
+									"name": "Link_Level",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"fabricHIfPol\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/infra/hintfpol-{{LL_name}}\",\n\t\t\t\"name\": \"{{LL_name}}\",\n\t\t\t\"speed\":\"{{speed}}\",\n\t\t\t\"rn\": \"hintfpol-{{LL_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/hintfpol-{{LL_name}}.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"hintfpol-{{LL_name}}.json"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "CDP_Enable",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"cdpIfPol\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/infra/cdpIfP-{{cdp_name}}\",\n\t\t\t\"name\": \"{{cdp_name}}\",\n\t\t\t\"rn\": \"cdpIfP-{{cdp_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/cdpIfP-{{cdp_name}}.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"cdpIfP-{{cdp_name}}.json"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "LLDP_Enable",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"lldpIfPol\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/infra/llpIfP-{{lldp_name}}\",\n\t\t\t\"name\": \"{{lldp_name}}\",\n\t\t\t\"rn\": \"lldpIfP-{{lldp_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/lldpIfP-{{lldp_name}}.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"lldpIfP-{{lldp_name}}.json"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "LACP_active",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"lacpLagPol\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/infra/lacplagp-{{lacp_name}}\",\n\t\t\t\"mode\": \"active\",\n\t\t\t\"name\": \"{{lacp_name}}\",\n\t\t\t\"rn\": \"lacplagp-{{lacp_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/lacplagp-{{lacp_name}}.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"lacplagp-{{lacp_name}}.json"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Storm-10",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"stormctrlIfPol\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/infra/stormctrlifp-{{storm-name}}\",\n\t\t\t\"name\": \"{{storm-name}}\",\n\t\t\t\"rate\": \"10\",\n\t\t\t\"burstRate\": \"10\",\n\t\t\t\"rn\": \"stormctrlifp-{{storm-name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://172.31.63.140/api/node/mo/uni/infra/stormctrlifp-{{storm-name}}.json",
+											"protocol": "https",
+											"host": [
+												"172",
+												"31",
+												"63",
+												"140"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"stormctrlifp-{{storm-name}}.json"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Global",
+							"item": [
+								{
+									"name": "AAEP",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"infraInfra\": {\n        \"attributes\": {\n            \"dn\": \"uni/infra\"\n        },\n        \"children\": [\n            {\n                \"infraAttEntityP\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/infra/attentp-{{AAEP_name}}\",\n                        \"name\": \"{{AAEP_name}}\",\n                        \"rn\": \"attentp-{{AAEP_name}}\"\n                    },\n                    \"children\": [\n                        {\n\t\t\t\t\t\t\t\"infraRsDomP\": {\n\t\t\t\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\t\t\t\"tDn\": \"uni/l3dom-{{L3_domain}}\",\n\t\t\t\t\t\t\t\t\t\"status\": \"created\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n                            \"infraRsDomP\": {\n                                \"attributes\": {\n                                    \"tDn\": \"uni/phys-{{PHY_Domain}}\"\n                                },\n                                \"children\": []\n                            }\n                        }\n                    ]\n                }\n            },\n            {\n                \"infraFuncP\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/infra/funcprof\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra.json"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "4.Interface",
+					"item": [
+						{
+							"name": "Leaf_Interface",
+							"item": [
+								{
+									"name": "Policy_Group",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"infraAccPortGrp\": {\n        \"attributes\": {\n            \"dn\": \"uni/infra/funcprof/accportgrp-{{port_gp}}\",\n            \"name\": \"{{port_gp}}\",\n            \"rn\": \"accportgrp-{{port_gp}}\"\n        },\n        \"children\": [\n            {\n                \"infraRsHIfPol\": {\n                    \"attributes\": {\n                        \"tnFabricHIfPolName\": \"{{LL_name}}\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"infraRsCdpIfPol\": {\n                    \"attributes\": {\n                        \"tnCdpIfPolName\": \"{{cdp_name}}\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"infraRsAttEntP\": {\n                    \"attributes\": {\n                        \"tDn\": \"uni/infra/attentp-{{AAEP_name}}\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"infraRsLldpIfPol\": {\n                    \"attributes\": {\n                        \"tnLldpIfPolName\": \"{{lldp_name}}\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"infraRsStormctrlIfPol\": {\n                    \"attributes\": {\n                        \"tnStormctrlIfPolName\": \"{{storm-name}}\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/funcprof/accportgrp-{{port_gp}}.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"funcprof",
+												"accportgrp-{{port_gp}}.json"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Leaf_IPF",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"infraAccPortP\": {\n        \"attributes\": {\n            \"dn\": \"uni/infra/accportprof-{{leaf_ipf}}\",\n            \"name\": \"{{leaf_ipf}}\",\n            \"rn\": \"accportprof-{{leaf_ipf}}\"\n        },\n        \"children\": []\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/accportprof-{{leaf_ipf}}.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"accportprof-{{leaf_ipf}}.json"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Interface_Selector",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"infraHPortS\": {\n        \"attributes\": {\n            \"dn\": \"uni/infra/accportprof-{{leaf_ipf}}/hports-{{int_sel}}-typ-range\",\n            \"name\": \"{{int_sel}}\",\n            \"rn\": \"hports-{{int_sel}}-typ-range\"\n        },\n        \"children\": [\n            {\n                \"infraPortBlk\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/infra/accportprof-{{leaf_ipf}}/hports-{{int_sel}}-typ-range/portblk-block2\",\n                        \"fromPort\": \"{{port_no}}\",\n\t\t\t\t\t\t\"toPort\": \"{{port_no}}\",\n                        \"name\": \"block2\",\n                    \t\"descr\": \"{{port_dec}}\",\n                        \"rn\": \"portblk-block2\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"infraRsAccBaseGrp\": {\n                    \"attributes\": {\n                        \"tDn\": \"uni/infra/funcprof/accportgrp-10G_AP\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://{{apic}}/api/node/mo/uni/infra/accportprof-{{leaf_ipf}}/hports-{{int_sel}}-typ-range.json",
+											"protocol": "https",
+											"host": [
+												"{{apic}}"
+											],
+											"path": [
+												"api",
+												"node",
+												"mo",
+												"uni",
+												"infra",
+												"accportprof-{{leaf_ipf}}",
+												"hports-{{int_sel}}-typ-range.json"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "5.Switch",
+					"item": [],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "LOGIN-APIC",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"aaaUser\": {\n        \"attributes\": {\n            \"name\": \"{{username}}\",\n            \"pwd\": \"{{password}}\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apic}}/api/aaaLogin.json",
+					"protocol": "https",
+					"host": [
+						"{{apic}}"
+					],
+					"path": [
+						"api",
+						"aaaLogin.json"
+					],
+					"query": [
+						{
+							"key": "apic",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

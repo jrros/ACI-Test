@@ -1,0 +1,3 @@
+tenant,vrfName,apName,bdName,subIP,arpFlood,macFlood,epgName,phyDom,sw-node-id,port-id,encapVL
+HKMA,HKMA_VRF,SVR_AP,v478_BD,172.28.78.1/24,yes,flood,v478-EPG,SVR_PY,,,			
+HKMA,HKMA_VRF,SVR_AP,v477_BD,172.28.77.1/24,yes,flood,v477-EPG,SVR_PY,,,
